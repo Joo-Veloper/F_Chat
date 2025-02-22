@@ -2,19 +2,22 @@
   <v-app>
     <HeaderComponent/>
     <v-main>
-      <router-viex/>
+      <router-view/>
     </v-main>
-  </v-app>  
+  </v-app>
 </template>
 
 <script>
+
 import HeaderComponent from './components/HeaderComponent.vue'
+
 export default {
   name: 'App',
   components: {
-    HeaderComponent    
+    HeaderComponent
   }
 }
+
 </script>
 
 <style>
