@@ -4,15 +4,16 @@
             <v-col cols="12" md="8">
                 <v-card>
                     <v-card-title class="text-center text-h5">
-                        채팅
+                        TALK
                     </v-card-title>
                     <v-card-text>
                         <div class="chat-box">
                             <div 
                              v-for="(msg, index) in messages"
                              :key="index"
+                             :class="['chat-message', msg.senderEmail ===this.senderEmail ? 'sent' : 'received' ]"
                             >
-                                {{ msg }}
+                                <strong>{{ msg.senderEmail }}: </strong> {{ msg.message }}
                             </div>
                         </div>
                         <v-text-field
@@ -43,17 +44,26 @@ export default{
             messages: [],
             newMessage: "",
             stompClient: null,
-            token: ""
+            token: "",
+            senderEmail: null,
         }
     },
     created(){
+        this.senderEmail = localStorage.getItem("email");
         this.connectWebsocket();
     },
+    // 현재 라우트에서 다른 라우트 이동 훅 함수
+    beforeRouteLeave(to, from, next) {
+        this.disconnectWebSocket();
+        next();
+    },
+    //화면을 껐을때
     beforeUnmount() {
         this.disconnectWebSocket();
     },
     methods: {
         connectWebsocket(){
+            if(this.stompClient && this.stompClient.conneted) return;
             const sockJs = new SockJS(`${process.env.VUE_APP_API_BASE_URL}/connect`)
             this.stompClient = Stomp.over(sockJs);
             this.token = localStorage.getItem("token");
@@ -61,9 +71,10 @@ export default{
                 Authorization: `Bearer ${this.token}`
             },
                () => {
-                this.stompClient.subscribe(`/topic/1`, (messages) => {
-                    console.log(messages);
-                    this.messages.push(messages.body);
+                this.stompClient.subscribe(`/topic/1`, (message) => {
+                    console.log(message);
+                    const parseMessage = JSON.parse(message.body);
+                    this.messages.push(parseMessage);
                     this.scrollToBottom();
                 })
                }
@@ -71,7 +82,11 @@ export default{
         },
         sendMessage(){
             if(this.newMessage.trim() === "")return;
-            this.stompClient.send(`/publish/1`, this.newMessage);
+            const message = {
+                senderEmail : this.senderEmail, 
+                message : this.newMessage
+            }
+            this.stompClient.send(`/publish/1`, JSON.stringify(message));
             this.newMessage = ""
         },
         scrollToBottom(){
@@ -81,7 +96,10 @@ export default{
             })
         },
         disconnectWebSocket(){
-            
+            if(this.stompClient && this.stompClient.conneted){
+                this.stompClient.unsubscribe(`/topic/1`);
+                this.stompClient.disconnect();
+            }
         }
     },
 }

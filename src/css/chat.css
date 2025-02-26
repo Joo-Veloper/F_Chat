@@ -4,3 +4,15 @@
   border: 1px solid #ddd;
   margin-bottom: 10px;
 }
+
+.chat-message {
+  margin-bottom: 10px;
+}
+
+.sent {
+  text-align: right;
+}
+
+.recived {
+  text-align: left;
+}
