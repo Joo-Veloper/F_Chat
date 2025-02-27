@@ -96,7 +96,7 @@ export default{
             })
         },
         disconnectWebSocket(){
-            if(this.stompClient && this.stompClient.conneted){
+            if(this.stompClient && this.stompClient.connected){
                 this.stompClient.unsubscribe(`/topic/1`);
                 this.stompClient.disconnect();
             }
