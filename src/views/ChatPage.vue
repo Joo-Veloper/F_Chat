@@ -36,7 +36,7 @@
 import SockJS from 'sockjs-client';
 import Stomp from 'webstomp-client';
 import "@/css/chat.css";
-// import axios from 'axios';
+import axios from 'axios';
 
 export default{
     data(){
@@ -49,9 +49,11 @@ export default{
             roomId: null,
         }
     },
-    created(){
+    async created(){
         this.senderEmail = localStorage.getItem("email");
         this.roomId = this.$route.params.roomId;
+        const response = await axios.get(`${process.env.VUE_APP_API_BASE_URL}/chat/history/${this.roomId}`);
+        this.messages = response.data;
         this.connectWebsocket();
     },
     // 현재 라우트에서 다른 라우트 이동 훅 함수
@@ -65,7 +67,7 @@ export default{
     },
     methods: {
         connectWebsocket(){
-            if(this.stompClient && this.stompClient.conneted) return;
+            if(this.stompClient && this.stompClient.connected) return;
             const sockJs = new SockJS(`${process.env.VUE_APP_API_BASE_URL}/connect`)
             this.stompClient = Stomp.over(sockJs);
             this.token = localStorage.getItem("token");
@@ -74,11 +76,10 @@ export default{
             },
                () => {
                 this.stompClient.subscribe(`/topic/${this.roomId}`, (message) => {
-                    console.log(message);
                     const parseMessage = JSON.parse(message.body);
                     this.messages.push(parseMessage);
                     this.scrollToBottom();
-                })
+                    },{Authorization: `Bearer ${this.token}`})
                }
             )
         },
