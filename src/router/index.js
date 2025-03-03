@@ -3,6 +3,7 @@ import MemberCreate from "@/views/MemberCreate.vue";
 import LoginPage from "@/views/LoginPage.vue";
 import MemberList from "@/views/MemberList.vue";
 import ChatPage from "@/views/ChatPage.vue";
+import GroupChattingList from "@/views/GroupChattingList.vue";
 
 const routes = [
   {
@@ -21,9 +22,14 @@ const routes = [
     component: MemberList,
   },
   {
-    path: "/chatpage",
+    path: "/chatpage/:roomId",
     name: "ChatPage",
     component: ChatPage,
+  },
+  {
+    path: "/groupchatting/list",
+    name: "GroupChattingList",
+    component: GroupChattingList,
   },
 ];
 
