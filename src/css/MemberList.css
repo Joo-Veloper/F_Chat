@@ -1,0 +1,55 @@
+/* 배경 */
+.chat-container {
+  background-color: #f7f7f7;
+  min-height: 100vh;
+  padding-top: 50px;
+}
+
+/* 카드 디자인 */
+.chat-card {
+  border-radius: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  padding: 20px;
+}
+
+/* 테이블 스타일 */
+.custom-table {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+thead {
+  background-color: #fee500;
+  color: #3a3a3a;
+  font-weight: bold;
+}
+
+th,
+td {
+  padding: 12px;
+  text-align: left;
+  font-size: 16px;
+  color: #3a3a3a;
+}
+
+/* 테이블 행 hover*/
+.table-row:hover {
+  background-color: #fff9c4;
+  transition: background-color 0.3s ease;
+}
+
+/* 채팅 버튼 스타일*/
+.chat-button {
+  background-color: #fee500;
+  color: #3a3a3a;
+  font-weight: bold;
+  border-radius: 20px;
+  padding: 8px 15px;
+  transition: all 0.2s ease-in-out;
+}
+
+.chat-button:hover {
+  background-color: #ffd700;
+  transform: scale(1.05);
+}

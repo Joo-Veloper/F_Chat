@@ -1,32 +1,21 @@
 <template>
-    <v-container>
+    <v-container class="signup-container">
         <v-row justify="center">
-            <v-col cols="12" sm="4" md="6">
-                <v-card>
-                    <v-card-title class="text-h5 text-center">회원가입</v-card-title>
+            <v-col cols="12" sm="8" md="6">
+                <v-card class="signup-card">
+                    <v-card-title class="text-h5 text-center font-weight-bold">회원가입</v-card-title>
                     <v-card-text>
                         <v-form @submit.prevent="memberCreate">
-                            <v-text-field 
-                              label="이름"
-                              v-model="name"
-                              required
-                            >
-                            </v-text-field>
-                            <v-text-field 
-                              label="이메일"
-                              v-model="email"
-                              type="email"
-                              required
-                            ></v-text-field>
-                             
-                            <v-text-field 
-                              label="비밀번호"
-                              v-model="pw"
-                              type="password"
-                              required
-                            >
-                            </v-text-field>
-                            <v-btn type="submit" color="primary" block>등록</v-btn>
+                            <v-text-field label="이름" v-model="name" required outlined dense
+                                prepend-inner-icon="mdi-account"></v-text-field>
+
+                            <v-text-field label="이메일" v-model="email" type="email" required outlined dense
+                                prepend-inner-icon="mdi-email"></v-text-field>
+
+                            <v-text-field label="비밀번호" v-model="pw" type="password" required outlined dense
+                                prepend-inner-icon="mdi-lock"></v-text-field>
+
+                            <v-btn type="submit" class="signup-button" block>가입하기</v-btn>
                         </v-form>
                     </v-card-text>
                 </v-card>
@@ -38,27 +27,27 @@
 <script>
 
 import axios from 'axios';
+import '@/css/MemberCreate.css';
 
-export default{
-    data(){
-        return{
+export default {
+    data() {
+        return {
             name: "",
             email: "",
             pw: "",
         }
     },
-    methods:{
-        async memberCreate(){
+    methods: {
+        async memberCreate() {
             const data = {
                 name: this.name,
                 email: this.email,
                 pw: this.pw,
-                
+
             }
             await axios.post(`${process.env.VUE_APP_API_BASE_URL}/member/signup`, data);
             this.$router.push("/");
         }
     }
 }
-
 </script>
